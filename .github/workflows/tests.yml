@@ -1,0 +1,54 @@
+name: Dockerized Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering
+    inputs:
+      test_id:
+        description: "Specify the Test ID to run manually"
+        required: false
+        default: "all"
+
+jobs:
+  run-all-tests:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.test_id == 'all'
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build -t pytest-runner .
+
+      # Run All Tests
+      - name: Run All Tests
+        run: |
+          docker run --rm pytest-runner
+
+  run-specific-test:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.test_id != 'all'
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build -t pytest-runner .
+
+      # Run Specific Test
+      - name: Run Test by ID
+        env:
+          TEST_ID: ${{ github.event.inputs.test_id }}
+        run: |
+          docker run --rm -e TEST_ID=$TEST_ID pytest-runner
