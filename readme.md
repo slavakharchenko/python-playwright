@@ -39,5 +39,5 @@ pytest
 #### In case you run all tests you use run-all-tests job
 ![Run all tests](data/images/all.png)
 
-#### In case you run all tests you use run-specific-test job
+#### In case you run one specific test you use run-specific-test job
 ![Run specific test](data/images/specific.png)

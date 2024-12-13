@@ -30,10 +30,10 @@ def browser_context_args(browser_context_args):
 
 
 @pytest.fixture
-def search_page(page: Page) -> SearchPage:
+def searchPage(page: Page) -> SearchPage:
     return SearchPage(page)
 
 
 @pytest.fixture
-def result_page(page: Page) -> ResultPage:
+def resultPage(page: Page) -> ResultPage:
     return ResultPage(page)
